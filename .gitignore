@@ -1,0 +1,12 @@
+.vs/
+**/bin/
+**/obj/
+*.user
+
+# Accidental duplicate repositories kept locally but not part of this project.
+ModbusRTU_Main/
+postpone/
+git_project/
+
+# Build output from the accidental nested copy.
+thinger.ModbusRTULib/thinger.ModbusProject/
