@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="10.0.10" />
+  </ItemGroup>
+
+  <!-- Ignore the accidentally nested application project and its build output. -->
+  <ItemGroup>
+    <Compile Remove="thinger.ModbusProject\**" />
+    <EmbeddedResource Remove="thinger.ModbusProject\**" />
+    <None Remove="thinger.ModbusProject\**" />
+  </ItemGroup>
+
+</Project>
