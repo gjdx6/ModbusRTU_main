@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj": {}
+    "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj": {}
   },
   "projects": {
-    "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj": {
+    "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
+        "projectUniqueName": "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
         "projectName": "thinger.ModbusRTULib",
-        "projectPath": "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
+        "projectPath": "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\obj\\",
+        "outputPath": "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -69,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

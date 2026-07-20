@@ -1,6 +1,5 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO.Ports;
-using System.Reflection.Metadata.Ecma335;
 
 namespace thinger.ModbusRTULib
 {
@@ -18,7 +17,12 @@ namespace thinger.ModbusRTULib
 
         #region 字段或属性
         //串口通信对象
-        private SerialPort serialPort;
+        private readonly SerialPort serialPort;
+
+        /// <summary>
+        /// Last connection or communication error.
+        /// </summary>
+        public string? LastError { get; private set; }
 
         /// <summary>
         /// 读取超时时间
@@ -53,8 +57,10 @@ namespace thinger.ModbusRTULib
         /// <returns>返回bool,表示是否成功</returns>
         public bool Connect(String portName, int baudRate = 9600, Parity parity = Parity.None, int data = 8, StopBits stopBits = StopBits.One)
         {
+            LastError = null;
+
             //如果当前串口打开,先关闭
-            if (serialPort != null && serialPort.IsOpen)
+            if (serialPort.IsOpen)
             {
                 serialPort.Close();
             }
@@ -76,7 +82,8 @@ namespace thinger.ModbusRTULib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LastError = ex.Message;
+                Debug.WriteLine("连接异常: " + ex);
                 return false;
             }
         }
@@ -92,6 +99,8 @@ namespace thinger.ModbusRTULib
             {
                 serialPort.Close();
             }
+
+            LastError = null;
         }
 
         #endregion
@@ -104,7 +113,7 @@ namespace thinger.ModbusRTULib
         /// <param name="start">起始线圈地址</param>
         /// <param name="length">长度</param>
         /// <returns>返回数据</returns>
-        public byte[] ReadOutputColis(byte slaveId, ushort start, ushort length)
+        public byte[]? ReadOutputColis(byte slaveId, ushort start, ushort length)
         {
             //第一步:拼接报文
 
@@ -133,14 +142,14 @@ namespace thinger.ModbusRTULib
 
             //第三步:接收报文
 
-            byte[] receive = null;
+            byte[]? receive = null;
 
             int byteLength = (length + 7) / 8;
 
             if (SendAndReceive(SendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 5 + byteLength)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 5 + byteLength)
                 {
 
                     if (receive[0] == slaveId && receive[1] == 0x01 && receive[2] == byteLength)
@@ -167,7 +176,7 @@ namespace thinger.ModbusRTULib
         /// <param name="start">起始线圈地址</param>
         /// <param name="length">长度</param>
         /// <returns>返回数据</returns>
-        public byte[] ReadInputColis(byte slaveId, ushort start, ushort length)
+        public byte[]? ReadInputColis(byte slaveId, ushort start, ushort length)
         {
             //第一步:拼接报文
 
@@ -196,14 +205,14 @@ namespace thinger.ModbusRTULib
 
             //第三步:接收报文
 
-            byte[] receive = null;
+            byte[]? receive = null;
 
             int byteLength = (length + 7) / 8;
 
             if (SendAndReceive(SendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 5 + byteLength)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 5 + byteLength)
                 {
 
                     if (receive[0] == slaveId && receive[1] == 0x02 && receive[2] == byteLength)
@@ -230,7 +239,7 @@ namespace thinger.ModbusRTULib
         /// <param name="start">开始寄存器地址</param>
         /// <param name="length">数量</param>
         /// <returns>返回字节数组</returns>
-        public byte[] ReadOutPutRegisters(byte slaveId, ushort start, ushort length)
+        public byte[]? ReadOutPutRegisters(byte slaveId, ushort start, ushort length)
         {
             //第一步:拼接报文
             List<byte> sendCommand = new List<byte>();
@@ -250,13 +259,13 @@ namespace thinger.ModbusRTULib
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             int byteLength = length * 2;
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 5 + byteLength)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 5 + byteLength)
                 {
                     if (receive[0] == slaveId && receive[1] == 0x03 && receive[2] == byteLength)
                     {
@@ -280,7 +289,7 @@ namespace thinger.ModbusRTULib
         /// <param name="start">开始寄存器地址</param>
         /// <param name="length">数量</param>
         /// <returns>返回字节数组</returns>
-        public byte[] ReadInPutRegisters(byte slaveId, ushort start, ushort length)
+        public byte[]? ReadInPutRegisters(byte slaveId, ushort start, ushort length)
         {
             //第一步:拼接报文
             List<byte> sendCommand = new List<byte>();
@@ -300,13 +309,13 @@ namespace thinger.ModbusRTULib
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             int byteLength = length * 2;
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 5 + byteLength)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 5 + byteLength)
                 {
                     if (receive[0] == slaveId && receive[1] == 0x04 && receive[2] == byteLength)
                     {
@@ -350,12 +359,12 @@ namespace thinger.ModbusRTULib
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 8)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 8)
                 {
                     return ByteArrayEquals(sendCommand.ToArray(), receive);
                 }
@@ -392,12 +401,12 @@ namespace thinger.ModbusRTULib
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 8)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 8)
                 {
                     return ByteArrayEquals(sendCommand.ToArray(), receive);
                 }
@@ -439,7 +448,7 @@ namespace thinger.ModbusRTULib
             List<byte> sendCommand = new List<byte>();
 
             byte[] setArray = GetByteArrayFromBoolArray(value);
-        
+
             sendCommand.Add(slaveId);
 
             sendCommand.Add(0x0F);
@@ -452,19 +461,19 @@ namespace thinger.ModbusRTULib
 
             sendCommand.Add((byte)(setArray.Length));
 
-            sendCommand.AddRange(setArray); 
+            sendCommand.AddRange(setArray);
 
             sendCommand.AddRange(Crc16(sendCommand.ToArray(), sendCommand.Count));
 
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 8)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 8)
                 {
                     //验证发送和接收的前六位字节是否相同
                     for (int i = 0; i < 6; i++)
@@ -493,7 +502,7 @@ namespace thinger.ModbusRTULib
         /// <returns></returns>
         public bool PreSetMutiRegisters(byte slaveId, ushort start, byte[] values)
         {
-            if(values == null || values.Length == 0 || values.Length % 2 == 1)
+            if (values == null || values.Length == 0 || values.Length % 2 == 1)
             {
                 return false;
             }
@@ -522,12 +531,12 @@ namespace thinger.ModbusRTULib
             //第二步:发送报文
 
             //第三步:接收报文
-            byte[] receive = null;
+            byte[]? receive = null;
 
             if (SendAndReceive(sendCommand.ToArray(), ref receive))
             {
                 //第四步:验证报文
-                if (CheckCRC(receive) && receive.Length == 8)
+                if (receive is not null && CheckCRC(receive) && receive.Length == 8)
                 {
                     //验证发送和接收的前六位字节是否相同
                     for (int i = 0; i < 6; i++)
@@ -553,10 +562,16 @@ namespace thinger.ModbusRTULib
         /// <returns>判断是否成功</returns>
 
         #region 发送并接收方法
-        private bool SendAndReceive(byte[] send, ref byte[] receive)
+        private bool SendAndReceive(byte[] send, ref byte[]? receive)
         {
             try
             {
+                if (!serialPort.IsOpen)
+                {
+                    LastError = "串口未连接";
+                    return false;
+                }
+
                 Debug.WriteLine("发送: " + BitConverter.ToString(send).Replace("-", " "));
 
                 //发送报文
@@ -571,6 +586,7 @@ namespace thinger.ModbusRTULib
 
                 //定义一个开始时间
                 DateTime start = DateTime.Now;
+                DateTime lastData = start;
 
                 //这么处理的原因是为了防止一次性读不完整
                 //循环读取缓冲区的数据,如果大于0,就读出来,放到内存里,如果等于0,说明读完了
@@ -584,16 +600,19 @@ namespace thinger.ModbusRTULib
                         int count = this.serialPort.Read(buffer, 0, buffer.Length);
 
                         stream.Write(buffer, 0, count);
+                        lastData = DateTime.Now;
                     }
                     else
                     {
-                        if (stream.Length > 0)
+                        if (stream.Length > 0 &&
+                            (DateTime.Now - lastData).TotalMilliseconds >= Math.Max(30, Sleeptime * 3))
                         {
                             break;
                         }
                         else if ((DateTime.Now - start).TotalMilliseconds > this.RecieveTimeOut)
                         {
-                            Debug.WriteLine("接收超时");
+                            LastError = "接收超时";
+                            Debug.WriteLine(LastError);
                             return false;
                         }
                     }
@@ -607,6 +626,7 @@ namespace thinger.ModbusRTULib
             }
             catch (Exception ex)
             {
+                LastError = ex.Message;
                 Debug.WriteLine("通信异常: " + ex.Message);
                 return false;
             }
@@ -696,18 +716,18 @@ namespace thinger.ModbusRTULib
 
         #region 数组比较方法
 
-        private bool ByteArrayEquals(byte[] value1, byte[] value2) 
-        { 
-            if(value1 == null || value2 == null) return false;
+        private bool ByteArrayEquals(byte[] value1, byte[] value2)
+        {
+            if (value1 == null || value2 == null) return false;
 
-            if(value1.Length != value2.Length) return false;
+            if (value1.Length != value2.Length) return false;
 
             for (int i = 0; i < value1.Length; i++)
             {
-                if(value1 != value2)
+                if (value1[i] != value2[i])
                 {
                     return false;
-                } 
+                }
             }
             return true;
         }
@@ -719,7 +739,7 @@ namespace thinger.ModbusRTULib
         private byte[] GetByteArrayFromBoolArray(bool[] value)
         {
             int byteLength = (value.Length + 7) / 8;
-            
+
             byte[] result = new byte[byteLength];
 
             //for (int i = 0; i < result.Length; i++)
@@ -755,11 +775,12 @@ namespace thinger.ModbusRTULib
         /// <param name="bit">2的几次方</param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private byte SetBitValue(byte src, int bit, bool value) 
+        private byte SetBitValue(byte src, int bit, bool value)
         {
-            return value ? (byte)(src | (byte)Math.Pow(2,bit)): (byte)(src & ~(byte)Math.Pow(2,bit));  
+            return value ? (byte)(src | (byte)Math.Pow(2, bit)) : (byte)(src & ~(byte)Math.Pow(2, bit));
         }
 
         #endregion
     }
 }
+

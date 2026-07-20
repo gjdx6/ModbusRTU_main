@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OmCKdD3aTKk=",
+  "dgSpecHash": "ruztre8htGI=",
   "success": true,
-  "projectFilePath": "D:\\c#-project\\modbus-project\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
+  "projectFilePath": "D:\\c#-project\\modbus-project\\ModbusRTU_Main\\thinger.ModbusRTULib\\thinger.ModbusRTULib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\runtime.android-arm.runtime.native.system.io.ports\\10.0.10\\runtime.android-arm.runtime.native.system.io.ports.10.0.10.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\runtime.android-arm64.runtime.native.system.io.ports\\10.0.10\\runtime.android-arm64.runtime.native.system.io.ports.10.0.10.nupkg.sha512",

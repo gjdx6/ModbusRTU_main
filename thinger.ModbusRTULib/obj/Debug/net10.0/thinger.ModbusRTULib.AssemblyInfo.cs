@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("thinger.ModbusRTULib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+741e406cb0b7358a7418dfeb3218cb3306d24ff8")]
 [assembly: System.Reflection.AssemblyProductAttribute("thinger.ModbusRTULib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("thinger.ModbusRTULib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

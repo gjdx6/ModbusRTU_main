@@ -1,0 +1,8 @@
+.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Visual Studio's accidental nested project cache.
+thinger.ModbusRTULib/thinger.ModbusProject/
