@@ -5,4 +5,8 @@
 *.suo
 
 # Visual Studio's accidental nested project cache.
+ModbusRTU_Main/
+postpone/
+git_project/
 thinger.ModbusRTULib/thinger.ModbusProject/
+thinger.ModbusProject.local-backup/

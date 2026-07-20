@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "thinger.ModbusRTULib": {
+      "commandName": "Project"
+    }
+  }
+}

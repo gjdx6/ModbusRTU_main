@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../thinger.ModbusRTULib/thinger.ModbusRTULib.csproj" />
+  <Project Path="thinger.ModbusProject.csproj" />
+</Solution>
