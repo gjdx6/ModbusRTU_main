@@ -36,13 +36,13 @@ public partial class FrmModbusRTU : Form
             cmb_Port.SelectedIndex = 0;
         }
 
-        cmb_BaudRate.Items.AddRange(new[] { "2400", "4800", "9600", "19200", "38400" });
+        cmb_BaudRate.Items.AddRange("2400", "4800", "9600", "19200", "38400" );
         cmb_BaudRate.SelectedIndex = 2;
         cmb_Parity.DataSource = Enum.GetNames<Parity>();
         cmb_Parity.SelectedIndex = 0;
         cmb_StopBits.DataSource = Enum.GetNames<StopBits>();
         cmb_StopBits.SelectedIndex = 1;
-        cmb_DataBits.Items.AddRange(new[] { "7", "8" });
+        cmb_DataBits.Items.AddRange("7", "8");
         cmb_DataBits.SelectedIndex = 1;
         cmb_DataFormat.DataSource = Enum.GetNames<DataFormat>();
         cmb_DataFormat.SelectedIndex = 0;
